@@ -42,10 +42,14 @@ const addAction = action => {
       return data;
     });
 };
-const getActions = async () => {
+const getProjectsActions = async project_id => {
+  console.log("=====hit");
   try {
-    const actions = await db("actions");
-    return actions;
+    const actions = await db("actions").where({ project_id: project_id });
+    const project = await db("projects").where({ id: project_id });
+    if ((project, actions)) {
+      return { ...project[0], actions: actions };
+    }
   } catch (err) {
     console.log(`database error ${err}`);
   }
@@ -55,5 +59,6 @@ module.exports = {
   getProjects,
   getProjectsById,
   addProject,
-  addAction
+  addAction,
+  getProjectsActions
 };
