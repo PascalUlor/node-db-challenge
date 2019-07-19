@@ -43,16 +43,33 @@ const addAction = action => {
     });
 };
 const getProjectsActions = async project_id => {
-  console.log("=====hit");
   try {
     const actions = await db("actions").where({ project_id: project_id });
-    const project = await db("projects").where({ id: project_id });
+    const project = await db("projects")
+      .where({ id: project_id })
+      .first();
     if ((project, actions)) {
-      return { ...project[0], actions: actions };
+      return {
+        ...project,
+        completed: !!project.completed,
+        actions: actions.map(act => {
+          return { ...act, completed: !!act.completed };
+        })
+      };
     }
   } catch (err) {
     console.log(`database error ${err}`);
   }
+};
+
+const getAction = action_id => {
+  console.log("=====Query", action_id);
+  if (action_id) {
+    const action = db("actions").where({ id: action_id });
+    const context = db("context").where({ action_id: action_id });
+    return { ...action[0], context: context };
+  }
+  return db("actions");
 };
 
 module.exports = {
@@ -60,5 +77,6 @@ module.exports = {
   getProjectsById,
   addProject,
   addAction,
-  getProjectsActions
+  getProjectsActions,
+  getAction
 };

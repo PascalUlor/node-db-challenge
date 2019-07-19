@@ -85,7 +85,6 @@ const createAction = async (req, res) => {
   } catch (err) {}
 };
 const getInfoById = async (req, res) => {
-  console.log("=====API");
   const id = req.params.id;
   try {
     const info = await projectModel.getProjectsActions(id);
@@ -97,8 +96,39 @@ const getInfoById = async (req, res) => {
     }
     return res.status(404).json({
       status: 404,
-      message: "No actions available"
+      message: "No info available"
     });
+  } catch (err) {
+    return res.status(500).json({
+      status: 500,
+      err: err
+    });
+  }
+};
+
+const getActions = async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (id) {
+      const action = await projectModel.getAction(id);
+      if (action) {
+        return res.status(200).json({
+          status: 200,
+          data: action
+        });
+      }
+      return res.status(404).json({
+        status: 404,
+        message: "No actions available"
+      });
+    }
+    const action = await projectModel.getAction();
+    if (action) {
+      return res.status(200).json({
+        status: 200,
+        data: action
+      });
+    }
   } catch (err) {
     return res.status(500).json({
       status: 500,
@@ -112,5 +142,6 @@ module.exports = {
   getProjectById,
   createProject,
   createAction,
-  getInfoById
+  getInfoById,
+  getActions
 };
