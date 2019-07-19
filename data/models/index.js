@@ -35,8 +35,25 @@ const addProject = project => {
     });
 };
 
+const addAction = action => {
+  return db("actions")
+    .insert(action)
+    .then(data => {
+      return data;
+    });
+};
+const getActions = async () => {
+  try {
+    const actions = await db("actions");
+    return actions;
+  } catch (err) {
+    console.log(`database error ${err}`);
+  }
+};
+
 module.exports = {
   getProjects,
   getProjectsById,
-  addProject
+  addProject,
+  addAction
 };

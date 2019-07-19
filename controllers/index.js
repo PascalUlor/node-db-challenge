@@ -67,8 +67,27 @@ const createProject = async (req, res) => {
   }
 };
 
+const createAction = async (req, res) => {
+  const id = req.params.id;
+  const { notes, description } = req.body;
+  try {
+    const newAction = await projectModel.addAction({
+      notes,
+      description,
+      project_id: id
+    });
+    if (newAction) {
+      res.status(201).json({
+        status: 201,
+        data: newAction
+      });
+    }
+  } catch (err) {}
+};
+
 module.exports = {
   getAllProjects,
   getProjectById,
-  createProject
+  createProject,
+  createAction
 };
