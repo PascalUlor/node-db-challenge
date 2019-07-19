@@ -137,11 +137,31 @@ const getActions = async (req, res) => {
   }
 };
 
+const updateProject = async (req, res) => {
+  const id = req.params.id;
+  const { notes, description } = req.body;
+  try {
+    const update = await projectModel.updateProject({ notes, description }, id);
+    if (update) {
+      res.status(200).json({
+        status: 200,
+        data: update
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      status: 500,
+      err: err
+    });
+  }
+};
+
 module.exports = {
   getAllProjects,
   getProjectById,
   createProject,
   createAction,
   getInfoById,
-  getActions
+  getActions,
+  updateProject
 };
