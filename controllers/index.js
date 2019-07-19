@@ -156,6 +156,24 @@ const updateProject = async (req, res) => {
   }
 };
 
+const deleteProject = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const removeData = await projectModel.deleteProject(id);
+    if (id) {
+      res.status(200).json({
+        status: 200,
+        data: removeData
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      status: 500,
+      err: err
+    });
+  }
+};
+
 module.exports = {
   getAllProjects,
   getProjectById,
@@ -163,5 +181,6 @@ module.exports = {
   createAction,
   getInfoById,
   getActions,
-  updateProject
+  updateProject,
+  deleteProject
 };

@@ -44,6 +44,12 @@ const updateProject = (project, id) => {
     });
 };
 
+const deleteProject = id => {
+  return db("projects")
+    .where("id", id)
+    .del();
+};
+
 const addAction = action => {
   return db("actions")
     .insert(action)
@@ -104,5 +110,6 @@ module.exports = {
   addAction,
   getProjectsActions,
   getAction,
-  updateProject
+  updateProject,
+  deleteProject
 };
