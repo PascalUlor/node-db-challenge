@@ -10,10 +10,10 @@ exports.up = function(knex) {
       table.increments();
       table
         .integer("project_id")
-        .unique()
-        .inTable()
-        .notNullable()
         .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("projects")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
       table.text("notes", 128).notNullable();
