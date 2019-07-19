@@ -66,15 +66,21 @@ const getAction = async action_id => {
   console.log("=====Query", action_id);
   try {
     if (action_id) {
-      const action = await db("actions")
-        .where({ id: action_id })
-        .first();
-      const context = await db("context").where({ action_id: action_id });
-      return {
-        ...action,
-        completed: !!action.completed,
-        context: context
-      };
+      const contextActions = await db
+        .select(
+          "actions.notes",
+          "actions.description",
+          "actions.completed",
+          "actions.project_id",
+          "context.name"
+        )
+        .from("actions")
+        .join("contextactions", "contextactions.action_id ", "actions.id")
+        .join("context", "contextactions.context_id", "context.id")
+        .where({ action_id: action_id });
+      return contextActions.map(ca => {
+        return { ...ca, completed: !!ca.completed, name: [ca.name] };
+      });
     }
     return db("actions");
   } catch (err) {}
