@@ -25,7 +25,18 @@ const getProjectsById = async project_id => {
   }
 };
 
+const addProject = project => {
+  console.log(project);
+  return db("projects")
+    .insert(project)
+    .then(data => {
+      console.log(data);
+      return data;
+    });
+};
+
 module.exports = {
   getProjects,
-  getProjectsById
+  getProjectsById,
+  addProject
 };

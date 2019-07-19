@@ -49,7 +49,26 @@ const getProjectById = async (req, res) => {
   }
 };
 
+const createProject = async (req, res) => {
+  const { name, description } = req.body;
+  try {
+    const newProject = await projectModel.addProject({ name, description });
+    if (newProject) {
+      res.status(201).json({
+        status: 201,
+        data: newProject
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      status: 500,
+      err: err
+    });
+  }
+};
+
 module.exports = {
   getAllProjects,
-  getProjectById
+  getProjectById,
+  createProject
 };
