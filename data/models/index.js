@@ -63,7 +63,6 @@ const getProjectsActions = async project_id => {
 };
 
 const getAction = async action_id => {
-  console.log("=====Query", action_id);
   try {
     if (action_id) {
       const contextActions = await db
@@ -82,7 +81,10 @@ const getAction = async action_id => {
         return { ...ca, completed: !!ca.completed, name: [ca.name] };
       });
     }
-    return db("actions");
+    const allAction = await db("actions");
+    return allAction.map(ca => {
+      return { ...ca, completed: !!ca.completed };
+    });
   } catch (err) {}
 };
 
