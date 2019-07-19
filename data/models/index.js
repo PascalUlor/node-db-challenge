@@ -11,9 +11,15 @@ const getProjects = async () => {
 
 const getProjectsById = async project_id => {
   try {
-    await db("projects")
+    const data = await db
+      .select("*")
+      .from("projects")
       .join("actions", "actions.project_id", "projects.id")
       .where({ "projects.id": project_id });
+    if (data) {
+      return data;
+    }
+    return `id does not exist`;
   } catch (err) {
     console.log(`database error ${err}`);
   }
