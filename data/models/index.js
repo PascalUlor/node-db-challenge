@@ -62,14 +62,22 @@ const getProjectsActions = async project_id => {
   }
 };
 
-const getAction = action_id => {
+const getAction = async action_id => {
   console.log("=====Query", action_id);
-  if (action_id) {
-    const action = db("actions").where({ id: action_id });
-    const context = db("context").where({ action_id: action_id });
-    return { ...action[0], context: context };
-  }
-  return db("actions");
+  try {
+    if (action_id) {
+      const action = await db("actions")
+        .where({ id: action_id })
+        .first();
+      const context = await db("context").where({ action_id: action_id });
+      return {
+        ...action,
+        completed: !!action.completed,
+        context: context
+      };
+    }
+    return db("actions");
+  } catch (err) {}
 };
 
 module.exports = {
